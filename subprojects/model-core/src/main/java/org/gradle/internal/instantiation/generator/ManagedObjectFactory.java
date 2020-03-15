@@ -25,7 +25,8 @@ import org.gradle.api.file.ConfigurableFileTree;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.internal.GeneratedSubclass;
-import org.gradle.api.internal.provider.OwnerAware;
+import org.gradle.internal.state.ModelObject;
+import org.gradle.internal.state.OwnerAware;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.MapProperty;
@@ -50,7 +51,7 @@ public class ManagedObjectFactory {
     }
 
     // Also called from generated code
-    public static <T> T attachOwner(GeneratedSubclass owner, @Nullable Describable ownerDisplayName, String propertyName, T instance) {
+    public static <T> T attachOwner(ModelObject owner, @Nullable Describable ownerDisplayName, String propertyName, T instance) {
         if (instance instanceof OwnerAware) {
             DisplayName property = displayNameFor(owner, ownerDisplayName, propertyName);
             ((OwnerAware) instance).attachDisplayName(property);
@@ -59,7 +60,7 @@ public class ManagedObjectFactory {
     }
 
     // Called from generated code
-    public Object newInstance(GeneratedSubclass owner, @Nullable Describable ownerDisplayName, String propertyName, Class<?> type) {
+    public Object newInstance(ModelObject owner, @Nullable Describable ownerDisplayName, String propertyName, Class<?> type) {
         if (type.isAssignableFrom(ConfigurableFileCollection.class)) {
             return attachOwner(owner, ownerDisplayName, propertyName, getObjectFactory().fileCollection());
         }
@@ -76,7 +77,7 @@ public class ManagedObjectFactory {
     }
 
     // Called from generated code
-    public Object newInstance(GeneratedSubclass owner, @Nullable Describable ownerDisplayName, String propertyName, Class<?> type, Class<?> paramType) {
+    public Object newInstance(ModelObject owner, @Nullable Describable ownerDisplayName, String propertyName, Class<?> type, Class<?> paramType) {
         if (type.isAssignableFrom(Property.class)) {
             return attachOwner(owner, ownerDisplayName, propertyName, getObjectFactory().property(paramType));
         }
@@ -96,14 +97,14 @@ public class ManagedObjectFactory {
     }
 
     // Called from generated code
-    public Object newInstance(GeneratedSubclass owner, @Nullable Describable ownerDisplayName, String propertyName, Class<?> type, Class<?> keyType, Class<?> valueType) {
+    public Object newInstance(ModelObject owner, @Nullable Describable ownerDisplayName, String propertyName, Class<?> type, Class<?> keyType, Class<?> valueType) {
         if (type.isAssignableFrom(MapProperty.class)) {
             return attachOwner(owner, ownerDisplayName, propertyName, getObjectFactory().mapProperty(keyType, valueType));
         }
         throw new IllegalArgumentException("Don't know how to create an instance of type " + type.getName());
     }
 
-    private static ManagedPropertyName displayNameFor(GeneratedSubclass owner, @Nullable Describable ownerDisplayName, String propertyName) {
+    private static ManagedPropertyName displayNameFor(ModelObject owner, @Nullable Describable ownerDisplayName, String propertyName) {
         if (ownerDisplayName instanceof ManagedPropertyName) {
             ManagedPropertyName root = (ManagedPropertyName) ownerDisplayName;
             return new ManagedPropertyName(root.owner, root.propertyName + "." + propertyName);
@@ -117,10 +118,10 @@ public class ManagedObjectFactory {
     }
 
     private static class ManagedPropertyName implements DisplayName {
-        private final GeneratedSubclass owner;
+        private final ModelObject owner;
         private final String propertyName;
 
-        public ManagedPropertyName(GeneratedSubclass owner, String propertyName) {
+        public ManagedPropertyName(ModelObject owner, String propertyName) {
             this.owner = owner;
             this.propertyName = propertyName;
         }
