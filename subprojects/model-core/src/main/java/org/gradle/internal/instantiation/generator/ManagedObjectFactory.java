@@ -24,9 +24,6 @@ import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.ConfigurableFileTree;
 import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.RegularFileProperty;
-import org.gradle.api.internal.GeneratedSubclass;
-import org.gradle.internal.state.ModelObject;
-import org.gradle.internal.state.OwnerAware;
 import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.MapProperty;
@@ -35,6 +32,8 @@ import org.gradle.api.provider.SetProperty;
 import org.gradle.internal.DisplayName;
 import org.gradle.internal.instantiation.InstanceGenerator;
 import org.gradle.internal.service.ServiceLookup;
+import org.gradle.internal.state.ModelObject;
+import org.gradle.internal.state.OwnerAware;
 
 import javax.annotation.Nullable;
 
